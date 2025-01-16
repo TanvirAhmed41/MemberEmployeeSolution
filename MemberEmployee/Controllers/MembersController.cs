@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using MemberEmployee.Models.Data;
 using MemberEmployee.Models.Entities;
@@ -13,7 +9,7 @@ namespace MemberEmployee.Controllers
 {
     public class MembersController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext(); //Interact with database
 
         // GET: Members
         public ActionResult Index()
@@ -39,12 +35,11 @@ namespace MemberEmployee.Controllers
         // GET: Members/Create
         public ActionResult Create()
         {
+            ViewBag.Members = new SelectList(db.Members, "Id", "Name");
             return View();
         }
 
         // POST: Members/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,Email,DateOfBirth")] Member member)
@@ -75,8 +70,7 @@ namespace MemberEmployee.Controllers
         }
 
         // POST: Members/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,Email,DateOfBirth")] Member member)

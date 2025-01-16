@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using MemberEmployee.Models.Data;
 using MemberEmployee.Models.Entities;
@@ -14,6 +10,7 @@ namespace MemberEmployee.Controllers
     public class EmployeesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
 
         // GET: Employees
         public ActionResult Index()
@@ -39,23 +36,39 @@ namespace MemberEmployee.Controllers
         // GET: Employees/Create
         public ActionResult Create()
         {
+            // Retrieve data from the Members table
+            ViewBag.Members = db.Members.ToList(); // Ensure 'db' is your database context
             return View();
         }
 
+
+
         // POST: Employees/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,Position,Salary")] Employee employee)
         {
             if (ModelState.IsValid)
             {
+                // Check if MemberId exists in the database
+                var memberExists = db.Members.Any(m => m.Id == employee.MemberId);
+                if (!memberExists)
+                {
+                    ModelState.AddModelError("MemberId", "The selected member does not exist.");
+                    // Re-populate ViewBag.Members and return the view for user correction
+                    ViewBag.Members = db.Members.ToList();
+                    return View(employee);
+                }
+
+                // Add and save employee
                 db.Employees.Add(employee);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
+            // If ModelState is invalid, re-populate ViewBag.Members and return the view
+            ViewBag.Members = db.Members.ToList();
             return View(employee);
         }
 
@@ -75,8 +88,7 @@ namespace MemberEmployee.Controllers
         }
 
         // POST: Employees/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,Position,Salary")] Employee employee)
