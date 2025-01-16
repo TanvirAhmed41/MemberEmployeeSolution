@@ -44,14 +44,15 @@
         @Html.LabelFor(model => model.MemberId, "Member", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.DropDownListFor(
-                model => model.MemberId,
-                new SelectList(ViewBag.Members, "Id", "Name"), // Ensure "Id" matches the column name in your Members table
+                model => model.MemberId, // This binds the selected value to the MemberId property in Employee
+                new SelectList(ViewBag.Members, "Id", "Name"), // "Id" and "Name" should match the properties in your Member model
                 "-- Select Member --",
                 new { @class = "form-control" }
             )
             @Html.ValidationMessageFor(model => model.MemberId, "", new { @class = "text-danger" })
         </div>
     </div>
+
 
 
 

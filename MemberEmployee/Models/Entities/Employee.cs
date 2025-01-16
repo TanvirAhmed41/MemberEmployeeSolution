@@ -2,15 +2,12 @@
 {
     public class Employee
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Position { get; set; }
-        public decimal Salary { get; set; }
-        // Foreign Key for Member
-        public int MemberId { get; set; }  // This should match the `Id` column in `Members` table
-
-        // Navigation property
-        public virtual Member Member { get; set; }
-
+        public int Id { get; set; } // Primary key
+        public string Name { get; set; } // Employee's name
+        public string Position { get; set; } // Employee's job position
+        public decimal Salary { get; set; } // Employee's salary
+        public int MemberId { get; set; } // Foreign key to Member
+        public virtual Member Member { get; set; } // Navigation property
     }
+
 }

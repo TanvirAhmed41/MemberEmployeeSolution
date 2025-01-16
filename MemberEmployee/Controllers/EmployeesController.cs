@@ -47,30 +47,21 @@ namespace MemberEmployee.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Position,Salary")] Employee employee)
+        public ActionResult Create(Employee employee)
         {
             if (ModelState.IsValid)
             {
-                // Check if MemberId exists in the database
-                var memberExists = db.Members.Any(m => m.Id == employee.MemberId);
-                if (!memberExists)
-                {
-                    ModelState.AddModelError("MemberId", "The selected member does not exist.");
-                    // Re-populate ViewBag.Members and return the view for user correction
-                    ViewBag.Members = db.Members.ToList();
-                    return View(employee);
-                }
-
-                // Add and save employee
+                // Save the employee
                 db.Employees.Add(employee);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            // If ModelState is invalid, re-populate ViewBag.Members and return the view
+            // Re-populate dropdown in case of errors
             ViewBag.Members = db.Members.ToList();
             return View(employee);
         }
+
 
         // GET: Employees/Edit/5
         public ActionResult Edit(int? id)
