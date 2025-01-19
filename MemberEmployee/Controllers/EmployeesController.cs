@@ -51,16 +51,25 @@ namespace MemberEmployee.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Save the employee
+                // Attach the Member entity to the context
+                var member = db.Members.Find(employee.MemberId);
+                if (member == null)
+                {
+                    ModelState.AddModelError("", "The selected Member does not exist.");
+                    ViewBag.Members = db.Members.ToList();
+                    return View(employee);
+                }
+
+                employee.Member = member; // Associate Member with Employee
                 db.Employees.Add(employee);
-                db.SaveChanges();
+                db.SaveChanges(); // Should work without errors now
                 return RedirectToAction("Index");
             }
 
-            // Re-populate dropdown in case of errors
             ViewBag.Members = db.Members.ToList();
             return View(employee);
         }
+
 
 
         // GET: Employees/Edit/5
