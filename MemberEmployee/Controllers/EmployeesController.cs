@@ -13,10 +13,13 @@ namespace MemberEmployee.Controllers
 
 
         // GET: Employees
-        public ActionResult Index()
-        {
-            return View(db.Employees.ToList());
-        }
+      public ActionResult Index()
+{
+            // Include related Member data if needed
+            var employees = db.Employees.Include(e => e.Member).ToList();
+            return View(employees);
+}
+
 
         // GET: Employees/Details/5
         public ActionResult Details(int? id)
@@ -25,19 +28,22 @@ namespace MemberEmployee.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
+
+            Member member = db.Members.Include("Employee").FirstOrDefault(m => m.MemberId == id);
+            if (member == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+
+            return View(member);
         }
+
 
         // GET: Employees/Create
         public ActionResult Create()
         {
             // Retrieve data from the Members table
-            ViewBag.Members = db.Members.ToList(); // Ensure 'db' is your database context
+            ViewBag.Members = db.Members.ToList(); 
             return View();
         }
 

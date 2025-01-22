@@ -1,5 +1,5 @@
 ﻿using System.Data.Entity;
-using MemberEmployee.Models.Data; // Add this if it's not there
+using MemberEmployee.Models.Data;
 
 namespace MemberEmployee.Models.Initializers
 {

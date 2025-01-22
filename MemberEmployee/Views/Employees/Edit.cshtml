@@ -4,7 +4,11 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>
+    Employee &mdash; Edit
+
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
+</h2>
 
 
 @using (Html.BeginForm())

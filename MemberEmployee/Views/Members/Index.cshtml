@@ -1,16 +1,54 @@
 ﻿@model IEnumerable<MemberEmployee.Models.Entities.Member>
 
+
 @{
     ViewBag.Title = "Index";
+}
+@{
+    ViewBag.Title = "Filter Members by Salary";
+}
+
+<h2>Filter Members by Salary</h2>
+
+@using (Html.BeginForm("FilterBySalary", "Members", FormMethod.Get))
+{
+    <div class="form-group">
+        <label for="minSalary">Minimum Salary:</label>
+        <input type="number"
+               name="minSalary"
+               class="form-control"
+               placeholder="Enter minimum salary"
+               step="0.01"
+               required />
+    </div>
+    <div class="form-group">
+        <label for="maxSalary">Maximum Salary:</label>
+        <input type="number"
+               name="maxSalary"
+               class="form-control"
+               placeholder="Enter maximum salary"
+               step="0.01"
+               required />
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
 }
 
 <h2>Index</h2>
 
 
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
 <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            Position
+        </th>
+        <th>
+            Salary
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Email)
@@ -28,6 +66,12 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
+                @(item.Employee != null ? item.Employee.Position : "N/A")
+            </td>
+            <td>
+                @(item.Employee != null ? item.Employee.Salary : 0.00m)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
@@ -40,8 +84,7 @@
             </td>
         </tr>
     }
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
 
 </table>
+
+<a href="@Url.Action("PrintDetails", "Members")" class="btn btn-primary">Print Member Details</a>

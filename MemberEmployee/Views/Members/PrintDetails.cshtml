@@ -1,0 +1,56 @@
+﻿@Model IEnumerable<MemberEmployee.Model.Entities.Member>
+    @{
+        ViewBag.Title = "PrintDetails";
+    }
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Member Details</title>
+        <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+     
+
+        </style>
+    </head>
+    <body>
+        <h1>Member and Employee Details</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Member Name</th>
+                    <th>Email</th>
+                    <th>Date of Birth</th>
+                    <th>Employee Position</th>
+                    <th>Salary</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var member in Model)
+                {
+                    <tr>
+                        <td>@member.Name</td>
+                        <td>@member.Email</td>
+                        <td>@member.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                        <td>@(member.Employee != null ? member.Employee.Position : "N/A")</td>
+                        <td>@(member.Employee != null ? member.Employee.Salary.ToString("C") : "N/A")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button class="no-print" onclick="window.print()">Print</button>
+    </body>
+</html>
+
+

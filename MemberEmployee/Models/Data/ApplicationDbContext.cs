@@ -1,7 +1,6 @@
 ﻿using System.Data.Entity;
 using MemberEmployee.Models.Entities;
 
-
 namespace MemberEmployee.Models.Data
 {
     public class ApplicationDbContext : DbContext

@@ -4,6 +4,7 @@ using System.Net;
 using System.Web.Mvc;
 using MemberEmployee.Models.Data;
 using MemberEmployee.Models.Entities;
+using Rotativa;
 
 namespace MemberEmployee.Controllers
 {
@@ -14,8 +15,11 @@ namespace MemberEmployee.Controllers
         // GET: Members
         public ActionResult Index()
         {
-            return View(db.Members.ToList());
+            // Ensure the Employee data is included when retrieving Members
+            var members = db.Members.Include(m => m.Employee).ToList();
+            return View(members);
         }
+
 
         // GET: Members/Details/5
         public ActionResult Details(int? id)
@@ -109,6 +113,35 @@ namespace MemberEmployee.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        //for filtering 
+        public ActionResult FilterBySalary(decimal? minSalary, decimal? maxSalary)
+        {
+            if (minSalary == null || maxSalary == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var filteredMembers = db.Members
+                .Include("Employee") // Ensures Employee is loaded with Member
+                .Where(m => m.Employee != null &&
+                            m.Employee.Salary >= minSalary &&
+                            m.Employee.Salary <= maxSalary)
+                .ToList();
+
+            return View("FilterBySalary", filteredMembers); 
+        }
+
+        //for printing members details
+
+        public ActionResult PrintDetails()
+        {
+            var members = db.Members.Include(m => m.Employee).ToList(); // Load related Employee data
+            return View(members); // Render the view with the members' data
+        }
+
+
+
 
         protected override void Dispose(bool disposing)
         {

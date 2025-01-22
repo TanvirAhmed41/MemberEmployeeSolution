@@ -1,10 +1,12 @@
 ﻿@model MemberEmployee.Models.Entities.Employee
 
-@{
-    ViewBag.Title = "Create Employee";
-}
 
-<h2>Create Employee</h2>
+
+<h2>
+    Employee &mdash; Create New
+
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
+</h2>
 
 @using (Html.BeginForm())
 {
@@ -52,6 +54,9 @@
             @Html.ValidationMessageFor(model => model.MemberId, "", new { @class = "text-danger" })
         </div>
     </div>
+    @{
+        ViewBag.Title = "Create Employee";
+    }
 
 
 
